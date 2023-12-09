@@ -1,5 +1,6 @@
-package org.example;
+package com.dange.tanmay.config;
 
+import com.dange.tanmay.repository.CredentialRepository;
 import com.warrenstrange.googleauth.GoogleAuthenticator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;

@@ -1,9 +1,9 @@
-package org.example;
+package com.dange.tanmay.dao;
 
 import lombok.Data;
 
 @Data
-public class ValidateCodeDto {
+public class ValidateCodeDao {
 
     public String username;
     public int code;

@@ -1,6 +1,8 @@
-package org.example;
+package com.dange.tanmay.controller;
 
-import net.bytebuddy.utility.nullability.AlwaysNull;
+import com.dange.tanmay.dao.User;
+import com.dange.tanmay.service.UserService;
+import com.dange.tanmay.dao.ValidateCodeDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.stereotype.Controller;
@@ -20,20 +22,19 @@ public class UserController {
 
 
     @GetMapping("/admin/users")
-    private List<Users> getAllUsers()
+    private List<User> getAllUsers()
     {
         return service.getAllUsers();
     }
 
 
-    //creating a get mapping that retrieves the detail of a specific student
     @GetMapping("/admin/user/{id}")
-    private Users getUser(@PathVariable("id") int id)
+    private User getUser(@PathVariable("id") int id)
     {
         return service.getUserById(id);
     }
 
-    //creating a delete mapping that deletes a specific student
+
     @GetMapping("/admin/deleteUser/{id}")
     private String deleteUser(@PathVariable("id") int id)
     {
@@ -41,12 +42,11 @@ public class UserController {
         return  "successful";
     }
 
-    //creating post mapping that post the user in the database
     @PostMapping("/admin/createUser")
-    private String saveStudent(@ModelAttribute("users") @RequestBody Users users)
+    private String saveStudent(@ModelAttribute("users") @RequestBody User user)
     {
-        service.saveOrUpdate(users);
-        userDetailsManager.createUser(users.castUserToUserDetails());
+        service.saveOrUpdate(user);
+        userDetailsManager.createUser(user.castUserToUserDetails());
         return "successful";
     }
 
@@ -60,7 +60,8 @@ public class UserController {
 
     @GetMapping("/admin/create-user")
     public String createUserPage(Model model) {
-        Users user = new Users();
+        User user = new User();
+        user.setMfaEnabled(false);
         model.addAttribute("user", user);
         return "create-user";
     }
@@ -68,8 +69,7 @@ public class UserController {
 
     @GetMapping("/admin/register-mfa/{username}")
     public String registerMFA(@PathVariable String username, Model model) {
-        System.out.println("Username passsed "+ username);
-        Users user = new Users();
+        User user = new User();
         user.setUserName(username);
         model.addAttribute("user", user);
         return "register-mfa";
@@ -78,7 +78,7 @@ public class UserController {
 
     @GetMapping("/validate/otp/{username}")
     public String viewHomePage(@PathVariable String username, Model model) {
-        ValidateCodeDto dto = new ValidateCodeDto();
+        ValidateCodeDao dto = new ValidateCodeDao();
         dto.setUsername(username);
         model.addAttribute("dto", dto);
         return "validate-otp";
@@ -89,4 +89,10 @@ public class UserController {
     public String login(Model model) {
         return "login";
     }
+
+    @GetMapping("/error")
+    public String error(Model model) {
+        return "error";
+    }
+
 }

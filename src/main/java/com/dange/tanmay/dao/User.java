@@ -1,7 +1,6 @@
-package org.example;
+package com.dange.tanmay.dao;
 
 import lombok.Data;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
@@ -9,7 +8,7 @@ import javax.persistence.*;
 @Table(name="USERDETAILS")
 @Entity
 @Data
-public class Users {
+public class User {
 
     @Id
     @Column(name="ID")
@@ -33,7 +32,7 @@ public class Users {
 
 
     public UserDetails castUserToUserDetails(){
-        return User.withDefaultPasswordEncoder()
+        return org.springframework.security.core.userdetails.User.withDefaultPasswordEncoder()
                         .username(userName)
                         .password(password)
                         .roles(role)

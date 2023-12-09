@@ -21,7 +21,6 @@
             <th>Password</th>
             <th>Role</th>
             <th>MFA Enabled</th>
-            <th>Secret</th>
         </tr>
         </thead>
         <tbody>
@@ -30,13 +29,12 @@
             <td th:text="${user.password}"></td>
             <td th:text="${user.role}"></td>
             <td th:text="${user.mfaEnabled}"></td>
-            <td th:text="${user.key}"></td>
             <td> <a th:href="@{/admin/register-mfa/{name}(name=${user.userName})}"
                     class="btn btn-primary">Register MFA</a>
                 <a th:href="@{/validate/otp/{name}(name=${user.userName})}"
-                   class="btn btn-primary">Validate MFA</a>
+                   class="btn btn-primary">Verify MFA</a>
                 <a th:href="@{/admin/deleteUser/{id}(id=${user.userId})}"
-                   class="btn btn-danger">Delete</a>
+                   class="btn btn-danger">Delete User</a>
             </td>
         </tr>
         </tbody>

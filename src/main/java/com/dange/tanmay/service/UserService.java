@@ -1,10 +1,9 @@
-package org.example;
+package com.dange.tanmay.service;
 
+import com.dange.tanmay.dao.User;
+import com.dange.tanmay.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,41 +13,38 @@ public class UserService {
     @Autowired
     UserRepository repository;
 
-
-    //getting all users records
-    public List<Users> getAllUsers()
+    public List<User> getAllUsers()
     {
-        List<Users> users = new ArrayList<>();
+        List<User> users = new ArrayList<>();
         repository.findAll().forEach(user -> users.add(user));
         return users;
     }
-    //getting a specific record
-    public Users getUserById(int id)
+
+    public User getUserById(int id)
     {
         return repository.findById(id).get();
     }
-    public void saveOrUpdate(Users users)
+
+    public void saveOrUpdate(User user)
     {
-        repository.save(users);
+        repository.save(user);
     }
+
     //deleting a specific record
-    public String delete(int id)
-    {
+    public String delete(int id){
         repository.deleteById(id);
         return  "Successfully Deleted!";
     }
 
 
-    public Users getUserByUsername(String username)
+    public User getUserByUsername(String username)
     {
-        List<Users> usersList = (List<Users>) repository.findAll();
+        List<User> userList = (List<User>) repository.findAll();
 
-        for (Users user : usersList){
+        for (User user : userList){
             if (user.userName.equals(username))
                 {return user;}
         }
         return null;
     }
-
-
 }

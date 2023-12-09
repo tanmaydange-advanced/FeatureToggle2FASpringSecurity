@@ -1,20 +1,16 @@
-package org.example;
+package com.dange.tanmay.config;
 
+import com.dange.tanmay.security.CustomWebAuthenticationDetailsSource;
+import com.dange.tanmay.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfiguration;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 
-import javax.annotation.Resource;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -24,6 +20,9 @@ public class WebSecurityConfig {
 
     @Autowired
     UserService userService;
+
+    @Autowired
+    private CustomWebAuthenticationDetailsSource authenticationDetailsSource;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -42,8 +41,9 @@ public class WebSecurityConfig {
                 .antMatchers("/code/**").permitAll()
                 .antMatchers("/h2-console/").permitAll()
                 .and()
-                .formLogin();
-                //.loginPage("/login");
+                .formLogin()
+                .authenticationDetailsSource(authenticationDetailsSource)
+                .loginPage("/login");
 
         return http.build();
 
@@ -51,31 +51,8 @@ public class WebSecurityConfig {
 
     @Bean
     public InMemoryUserDetailsManager userDetailsService() {
-        /*UserDetails admin =
-                User.withDefaultPasswordEncoder()
-                        .username("admin")
-                        .password("admin")
-                        .roles("ADMIN")
-                        .build();
-
-        UserDetails user1 = User.withDefaultPasswordEncoder()
-                .username("user1")
-                .password("user1")
-                .roles("USER")
-                .build();
-
-        UserDetails user2 = User.withDefaultPasswordEncoder()
-                .username("user2")
-                .password("user2")
-                .roles("USER")
-                .build();*/
-
-
-
-       // return new InMemoryUserDetailsManager(List.of(admin, user1,user2));
         List<UserDetails> listUsers = userService.getAllUsers().stream().map(x->x.castUserToUserDetails()).collect(Collectors.toList());
         return new InMemoryUserDetailsManager(listUsers);
     }
-
 
 }
